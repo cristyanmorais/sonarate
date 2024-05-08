@@ -1,0 +1,70 @@
+create table Account(
+	id serial primary key,
+	name varchar not null,
+	email varchar not null,
+	username varchar(20) not null,
+	password varchar not null
+);
+
+create table Genre(
+	id serial primary key,
+	name varchar not null
+);
+
+create table Subgenre(
+	id serial primary key,
+	genreId int references Genre(id) not null,
+	name varchar not null
+);
+
+create table RecordLabel(
+	id serial primary key,
+	name varchar not null
+);
+
+create table Artist(
+	id serial primary key,
+	genreId int references Genre(id) not null,
+	name varchar not null,
+	likes int default 0
+);
+
+create table Album(
+	id serial primary key,
+	artistId int references Artist(id) not null,
+	labelId int references RecordLabel(id) not null,
+	name varchar not null,
+	year varchar(4) not null,
+	listens int default 0,
+	likes int default 0
+);
+
+create table Song(
+	id serial primary key,
+	albumId int references Album(id) not null,
+	name varchar not null,
+	duration varchar(5) not null,
+	listens int default 0,
+	likes int default 0
+);
+
+create table Review(
+	id serial primary key,
+	accountId int references Account(id) not null,
+	albumId int references Album(id) not null,
+	rating int not null,
+	description varchar,
+	reviewdate date not null
+);
+
+create table List(
+	id serial primary key,
+	accountId int references Account(id) not null,
+	name varchar not null
+);
+
+create table ItemList(
+	listId int references List(id) not null,
+	albumId int references Album(id),
+	songId int references Song(id)
+);
